@@ -26,7 +26,7 @@ def create_video_from_prompt(prompt: str, output_path: str):
         # Replicate APIを呼び出して動画生成を開始
         output = replicate.run(
             MODEL_ID,
-            input={"prompt": prompt, "aspect_ratio": "9:16"},
+            input={"prompt": prompt, "aspect_ratio": "9:16", "duration": 10},
         )
 
         # APIの応答（ストリーム）を直接ファイルに書き込みます。
