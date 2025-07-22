@@ -1,0 +1,12 @@
+# Environment variables
+.env
+
+# Python cache
+__pycache__/
+*.pyc
+
+# Video files
+*.mp4
+
+# Temporary files
+temp_video_*.mp4

@@ -1,0 +1,40 @@
+{
+    "name": "asmr_video_prompt",
+    "strict": true,
+    "schema": {
+        "type": "object",
+        "properties": {
+            "title": {
+                "type": "string",
+                "description": "ASMR動画の内容を要約したタイトル（例：『図書館での雨音ASMR』）",
+                "minLength": 2,
+                "maxLength": 100
+            },
+            "theme": {
+                "type": "string",
+                "description": "動画のテーマ。ユーザー指定がない場合は典型的なASMRテーマ（例：『梱包の音』『ページめくり』など）。",
+                "minLength": 2,
+                "maxLength": 50
+            },
+            "video_prompt": {
+                "type": "string",
+                "description": "映像（seedance）生成に適した、情景・動作・アイテムなど視覚的要素を詳細に描写したプロンプト。",
+                "minLength": 10,
+                "maxLength": 1000
+            },
+            "audio_prompt": {
+                "type": "string",
+                "description": "MMAudio用のプロンプト。環境音・動作音・素材の特徴など、音響面をリアルに再現できる詳細な描写。",
+                "minLength": 10,
+                "maxLength": 1000
+            }
+        },
+        "required": [
+            "title",
+            "theme",
+            "video_prompt",
+            "audio_prompt"
+        ],
+        "additionalProperties": false
+    }
+}
