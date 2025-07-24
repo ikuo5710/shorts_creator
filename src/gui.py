@@ -1,9 +1,8 @@
-
-
 import flet as ft
 import subprocess
 import threading
 import os
+
 
 def main(page: ft.Page):
     page.title = "Shorts Creator"
@@ -11,7 +10,9 @@ def main(page: ft.Page):
     page.window_height = 600
 
     prompt_input = ft.TextField(label="Prompt", multiline=True, min_lines=3)
-    output_log = ft.TextField(label="Log", read_only=True, multiline=True, min_lines=10, expand=True)
+    output_log = ft.TextField(
+        label="Log", read_only=True, multiline=True, min_lines=10, expand=True
+    )
     output_dir_text = ft.Text("Output directory:")
     output_dir_path = ft.Text(os.path.abspath("."))
 
@@ -43,14 +44,24 @@ def main(page: ft.Page):
 
         def run():
             process = subprocess.Popen(
-                ["python", "-X", "utf8", "src/run_pipeline.py", prompt, "-o", output_dir],
+                [
+                    "python",
+                    "-u",
+                    "-X",
+                    "utf8",
+                    "src/run_pipeline.py",
+                    prompt,
+                    "-o",
+                    output_dir,
+                ],
                 stdout=subprocess.PIPE,
                 stderr=subprocess.STDOUT,
                 text=True,
-                encoding='utf-8', errors='ignore',
-                bufsize=1
+                encoding="utf-8",
+                errors="ignore",
+                bufsize=1,
             )
-            for line in iter(process.stdout.readline, ''):
+            for line in iter(process.stdout.readline, ""):
                 output_log.value += line
                 page.update()
             process.stdout.close()
@@ -66,17 +77,21 @@ def main(page: ft.Page):
         os.startfile(output_dir_path.value)
 
     start_button = ft.ElevatedButton(text="Create Video", on_click=run_pipeline)
-    pick_dir_button = ft.ElevatedButton(text="Select Output Directory", on_click=pick_output_directory)
-    open_folder_button = ft.ElevatedButton(text="Open Output Directory", on_click=open_output_folder)
+    pick_dir_button = ft.ElevatedButton(
+        text="Select Output Directory", on_click=pick_output_directory
+    )
+    open_folder_button = ft.ElevatedButton(
+        text="Open Output Directory", on_click=open_output_folder
+    )
 
     page.add(
         prompt_input,
         ft.Row([pick_dir_button, output_dir_text, output_dir_path]),
         ft.Row([start_button, progress_ring]),
         output_log,
-        open_folder_button
+        open_folder_button,
     )
+
 
 if __name__ == "__main__":
     ft.app(target=main)
-
