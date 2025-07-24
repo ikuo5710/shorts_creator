@@ -2,9 +2,9 @@ import argparse
 import time
 import os
 import re
-from create_video import create_video_from_prompt
-from add_audio import add_audio_to_video
-from get_asmr_idea import get_asmr_idea
+from core.create_video import create_video_from_prompt
+from core.add_audio import add_audio_to_video
+from core.get_asmr_idea import get_asmr_idea
 
 def sanitize_filename(filename):
     """

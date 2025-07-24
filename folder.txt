@@ -1,0 +1,13 @@
+shorts_creator/
+├── src/
+│   ├── core/
+│   │   ├── get_asmr_idea.py
+│   │   ├── create_video.py
+│   │   └── add_audio.py
+│   ├── run_pipeline.py
+│   └── schema.json
+├── config/
+│   └── .env.example
+├── .gitignore
+├── requirements.txt
+└── README.md
