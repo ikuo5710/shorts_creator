@@ -10,6 +10,7 @@ def main(page: ft.Page):
     page.window_height = 600
 
     prompt_input = ft.TextField(label="Prompt", multiline=True, min_lines=3)
+    image_url_input = ft.TextField(label="Image URL (optional)")
     output_log = ft.TextField(
         label="Log", read_only=True, multiline=True, min_lines=10, expand=True
     )
@@ -31,6 +32,7 @@ def main(page: ft.Page):
 
     def run_pipeline(e):
         prompt = prompt_input.value
+        image_url = image_url_input.value
         output_dir = output_dir_path.value
         if not prompt:
             output_log.value += "Error: Prompt is required.\n"
@@ -43,17 +45,21 @@ def main(page: ft.Page):
         page.update()
 
         def run():
+            command = [
+                "python",
+                "-u",
+                "-X",
+                "utf8",
+                "src/run_pipeline.py",
+                prompt,
+                "-o",
+                output_dir,
+            ]
+            if image_url:
+                command.extend(['--image', image_url])
+
             process = subprocess.Popen(
-                [
-                    "python",
-                    "-u",
-                    "-X",
-                    "utf8",
-                    "src/run_pipeline.py",
-                    prompt,
-                    "-o",
-                    output_dir,
-                ],
+                command,
                 stdout=subprocess.PIPE,
                 stderr=subprocess.STDOUT,
                 text=True,
@@ -86,6 +92,7 @@ def main(page: ft.Page):
 
     page.add(
         prompt_input,
+        image_url_input,
         ft.Row([pick_dir_button, output_dir_text, output_dir_path]),
         ft.Row([start_button, progress_ring]),
         output_log,

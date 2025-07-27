@@ -12,26 +12,33 @@ load_dotenv()
 MODEL_ID = "bytedance/seedance-1-lite"
 
 
-def create_video_from_prompt(prompt: str, output_path: str):
+def create_video_from_prompt(prompt: str, output_path: str, image_url: str = None):
     """
     テキストプロンプトから動画を生成し、指定されたパスに保存する。
 
     Args:
         prompt (str): 動画生成のためのテキストプロンプト。
         output_path (str): 生成された動画を保存するファイルパス。
+        image_url (str, optional): 動画生成のベースにする画像のURL。Defaults to None.
     """
     print(f"動画生成を開始します... プロンプト: {prompt}")
+    if image_url:
+        print(f"ベース画像URL: {image_url}")
 
     try:
         # Replicate APIを呼び出して動画生成を開始
+        input_params = {
+            "prompt": prompt,
+            "aspect_ratio": "9:16",
+            "duration": 10,
+            "camera_fixed": True,
+        }
+        if image_url:
+            input_params["image"] = image_url
+
         output = replicate.run(
             MODEL_ID,
-            input={
-                "prompt": prompt,
-                "aspect_ratio": "9:16",
-                "duration": 10,
-                "camera_fixed": True,
-            },
+            input=input_params,
         )
 
         # APIの応答（ストリーム）を直接ファイルに書き込みます。
@@ -61,6 +68,9 @@ def main():
     )
     parser.add_argument("prompt", type=str, help="動画を説明するテキストプロンプト。")
     parser.add_argument(
+        "--image", type=str, default=None, help="動画生成のベースにする画像のURL。"
+    )
+    parser.add_argument(
         "-o",
         "--output",
         type=str,
@@ -70,7 +80,7 @@ def main():
 
     args = parser.parse_args()
 
-    create_video_from_prompt(args.prompt, args.output)
+    create_video_from_prompt(args.prompt, args.output, args.image)
 
 
 if __name__ == "__main__":

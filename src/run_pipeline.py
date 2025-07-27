@@ -31,6 +31,12 @@ def main():
         default=".",
         help="最終的な出力ファイルを保存するディレクトリ。デフォルトはカレントディレクトリです。"
     )
+    parser.add_argument(
+        "--image",
+        type=str,
+        default=None,
+        help="動画生成のベースにする画像のURL。"
+    )
 
     args = parser.parse_args()
 
@@ -62,7 +68,7 @@ def main():
 
     # 4. 動画を生成する
     print("\n--- ステップ2: 動画生成 ---")
-    create_video_from_prompt(video_prompt, video_only_path)
+    create_video_from_prompt(video_prompt, video_only_path, args.image)
 
     if not os.path.exists(video_only_path):
         print(f"エラー: 動画ファイル '{video_only_path}' の生成に失敗しました。処理を中断します。")
